@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Wars Calculator</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    /* =========================
+       STAR WARS THEME
+    ========================= */
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Orbitron', sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+      position:relative;
+
+      background:
+      radial-gradient(circle at top, #1b2735 0%, #090a0f 70%);
+    }
+
+    /* Background stars */
+    body::before{
+      content:"";
+      position:absolute;
+      width:100%;
+      height:100%;
+
+      background-image:
+      radial-gradient(white 1px, transparent 1px),
+      radial-gradient(white 1px, transparent 1px);
+
+      background-size:50px 50px;
+      background-position:0 0, 25px 25px;
+
+      opacity:0.3;
+      animation:starsMove 60s linear infinite;
+    }
+
+    @keyframes starsMove{
+      from{
+        transform:translateY(0);
+      }
+      to{
+        transform:translateY(100px);
+      }
+    }
+
+    /* Calculator */
+    .calculator{
+      position:relative;
+      z-index:2;
+
+      width:340px;
+      padding:25px;
+
+      border-radius:20px;
+
+      background:rgba(10,10,15,0.95);
+
+      border:2px solid #ffe81f;
+
+      box-shadow:
+      0 0 20px #ffe81f,
+      0 0 40px rgba(255,232,31,0.5);
+    }
+
+    .title{
+      text-align:center;
+      color:#ffe81f;
+      margin-bottom:20px;
+      font-size:28px;
+
+      text-shadow:
+      0 0 10px #ffe81f,
+      0 0 20px #ffe81f;
+    }
+
+    /* Display */
+    #display{
+      width:100%;
+      height:65px;
+
+      border:none;
+      outline:none;
+
+      border-radius:12px;
+
+      padding:10px;
+      margin-bottom:20px;
+
+      font-size:28px;
+      text-align:right;
+
+      background:#111;
+      color:#00ffcc;
+
+      box-shadow:
+      inset 0 0 10px #00ffcc,
+      0 0 10px rgba(0,255,204,0.4);
+    }
+
+    /* Buttons */
+    .buttons{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    button{
+      height:60px;
+
+      border:none;
+      border-radius:12px;
+
+      cursor:pointer;
+
+      font-size:22px;
+
+      transition:0.2s;
+
+      background:#1e1e1e;
+      color:white;
+
+      box-shadow:
+      0 0 5px rgba(255,255,255,0.2);
+    }
+
+    
+    }
+
+    /* Colors */
+    .operator{
+      background:#0d47a1;
+    }
+
+    .equal{
+      background:#2e7d32;
+    }
+
+    .clear{
+      background:#b71c1c;
+    }
+
+    .power{
+      background:#6a1b9a;
+    }
+
+    /* Lightsaber hover */
+    .operator:hover{
+      background:#2196f3;
+      box-shadow:
+      0 0 10px #2196f3,
+      0 0 20px #2196f3;
+    }
+
+    .equal:hover{
+      background:#00e676;
+      box-shadow:
+      0 0 10px #00e676,
+      0 0 20px #00e676;
+    }
+
+    .clear:hover{
+      background:#ff1744;
+      box-shadow:
+      0 0 10px #ff1744,
+      0 0 20px #ff1744;
+    }
+
+    .power:hover{
+      background:#d500f9;
+      box-shadow:
+      0 0 10px #d500f9,
+      0 0 20px #d500f9;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+
+    <h1 class="title">STAR WARS</h1>
+
+    <input type="text" id="display" disabled>
+
+    <div class="buttons">
+
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="deleteLast()">⌫</button>
+      <button class="operator" onclick="appendValue('/')">÷</button>
+      <button class="operator" onclick="appendValue('*')">×</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button class="operator" onclick="appendValue('-')">−</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button class="operator" onclick="appendValue('+')">+</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button class="equal" onclick="calculate()">=</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+
+      <!-- Pangkat -->
+      <button class="power" onclick="appendValue('**')">x²</button>
+      <button class="power" onclick="appendValue('**')">xʸ</button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const display = document.getElementById("display");
+
+    function appendValue(value){
+      display.value += value;
+    }
+
+    function clearDisplay(){
+      display.value = "";
+    }
+
+    function deleteLast(){
+      display.value = display.value.slice(0, -1);
+    }
+
+    function calculate(){
+      try{
+        display.value = eval(display.value);
+      }
+      catch{
+        display.value = "Error";
+      }
+    }
+
+  </script>
+
+</body>
+</html>
